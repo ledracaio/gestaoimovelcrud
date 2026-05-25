@@ -43,6 +43,27 @@ class ClienteController extends Controller
         ]);
     }
 
+    public function edit(Cliente $cliente)
+    {
+        return view('clientes.edit', [
+            'cliente' => $cliente,
+            'title' => 'Editar Cliente'
+        ]);
+    }
+
+    public function update(Request $request, Cliente $cliente)
+    {
+        $dados = $request->validate([
+            'nome' => 'required|min:4',
+            'telefone' => 'required',
+            'email' => 'required'
+        ]);
+
+        $cliente->update($dados);
+
+        return redirect()->route('clientes.index');
+    }
+
     public function delete(Cliente $cliente)
     {
         return view('clientes.delete', [

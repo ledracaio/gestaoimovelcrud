@@ -41,6 +41,25 @@ class TipoImovelController extends Controller
         ]);
     }
 
+    public function edit(TipoImovel $tipo)
+    {
+        return view('tipos.edit', [
+            'tipo' => $tipo,
+            'title' => 'Editar Tipo'
+        ]);
+    }
+
+    public function update(Request $request, TipoImovel $tipo)
+    {
+        $dados = $request->validate([
+            'nome' => 'required'
+        ]);
+
+        $tipo->update($dados);
+
+        return redirect()->route('tipos.index');
+    }
+
     public function delete(TipoImovel $tipo)
     {
         return view('tipos.delete', [

@@ -50,6 +50,33 @@ class ImovelController extends Controller
         ]);
     }
 
+    public function edit(Imovel $imovel)
+    {
+        $tipos = TipoImovel::all();
+
+        return view('imoveis.edit', [
+            'imovel' => $imovel,
+            'tipos' => $tipos,
+            'title' => 'Editar Imóvel'
+        ]);
+    }
+
+    public function update(Request $request, Imovel $imovel)
+    {
+        $dados = $request->validate([
+            'titulo' => 'required',
+            'endereco' => 'required',
+            'cidade' => 'required',
+            'valor' => 'required',
+            'status' => 'required',
+            'tipo_imovel_id' => 'required'
+        ]);
+
+        $imovel->update($dados);
+
+        return redirect()->route('imoveis.index');
+    }
+
     public function delete(Imovel $imovel)
     {
         return view('imoveis.delete', [

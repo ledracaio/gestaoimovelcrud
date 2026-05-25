@@ -22,6 +22,9 @@
             <td>{{ $cliente->nome }}</td>
             <td>
                 <a href="{{ route('clientes.show', $cliente) }}" class="btn btn-info btn-sm">Ver</a>
+                <a href="{{ route('clientes.edit', $cliente) }}" class="btn btn-warning btn-sm">
+                    Editar
+                </a>
                 <a href="{{ route('clientes.delete', $cliente) }}" class="btn btn-danger btn-sm">Excluir</a>
             </td>
         </tr>

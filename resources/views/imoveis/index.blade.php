@@ -30,6 +30,9 @@
                     <a href="{{ route('imoveis.show', $imovel) }}" class="btn btn-info btn-sm">
                         Ver
                     </a>
+                    <a href="{{ route('imoveis.edit', $imovel) }}" class="btn btn-warning btn-sm">
+                        Editar
+                    </a>
                     <a href="{{ route('imoveis.delete', $imovel) }}" class="btn btn-danger btn-sm">
                         Excluir
                     </a>

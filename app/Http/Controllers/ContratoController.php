@@ -52,6 +52,33 @@ class ContratoController extends Controller
         ]);
     }
 
+    public function edit(Contrato $contrato)
+    {
+        $clientes = Cliente::all();
+        $imoveis = Imovel::all();
+
+        return view('contratos.edit', [
+            'contrato' => $contrato,
+            'clientes' => $clientes,
+            'imoveis' => $imoveis,
+            'title' => 'Editar Contrato'
+        ]);
+    }
+
+    public function update(Request $request, Contrato $contrato)
+    {
+        $dados = $request->validate([
+            'cliente_id' => 'required',
+            'imovel_id' => 'required',
+            'data_inicio' => 'required',
+            'data_fim' => 'required'
+        ]);
+
+        $contrato->update($dados);
+
+        return redirect()->route('contratos.index');
+    }
+
     public function delete(Contrato $contrato)
     {
         return view('contratos.delete', [

@@ -24,6 +24,9 @@
                     <a href="{{ route('tipos.show', $tipo) }}" class="btn btn-info btn-sm">
                         Ver
                     </a>
+                    <a href="{{ route('tipos.edit', $tipo) }}" class="btn btn-warning btn-sm">
+                        Editar
+                    </a>
                     <a href="{{ route('tipos.delete', $tipo) }}" class="btn btn-danger btn-sm">
                         Excluir
                     </a>
