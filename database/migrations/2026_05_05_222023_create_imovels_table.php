@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('cidade');
             $table->decimal('valor', 10, 2);
             $table->string('status');
-            $table->foreignId('tipo_imovel_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('tipo_imovel_id')->constrained();
             $table->timestamps();
         });
     }

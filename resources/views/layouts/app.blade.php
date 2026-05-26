@@ -3,6 +3,16 @@
 <head>
     <title>{{ $title ?? 'Sistema' }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <script>
+        setTimeout(function() {
+            document.querySelectorAll('.auto-hide').forEach(el => {
+                el.style.transition = "opacity 0.5s";
+                el.style.opacity = "0";
+                setTimeout(() => el.remove(), 500);
+            });
+        }, 5000);
+    </script>
 </head>
 <body>
 <div class="d-flex">
@@ -31,6 +41,18 @@
     <!-- CONTEÚDO -->
     <div class="p-4 w-100 bg-light">
         @yield('content')
+        <br>
+        @if(session('success'))
+            <div class="alert alert-success auto-hide">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="alert alert-danger auto-hide">
+                {{ session('error') }}
+            </div>
+        @endif
     </div>
 
 </div>

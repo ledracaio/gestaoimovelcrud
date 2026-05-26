@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Imovel;
 use App\Models\TipoImovel;
 use Illuminate\Http\Request;
+use Illuminate\Database\QueryException;
 
 class ImovelController extends Controller
 {
@@ -88,7 +89,16 @@ class ImovelController extends Controller
 
     public function destroy(Imovel $imovel)
     {
-        $imovel->delete();
-        return redirect()->route('imoveis.index');
+        try {
+            $imovel->delete();
+
+            return redirect()->route('imoveis.index')
+                ->with('success', 'Imóvel excluído com sucesso!');
+
+        } catch (QueryException $e) {
+
+            return redirect()->back()
+                ->with('error', 'Não é possível excluir este imóvel pois ele está vinculado a contratos.');
+        }
     }
 }

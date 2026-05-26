@@ -35,12 +35,12 @@
 
                 <div class="mb-3">
                     <label class="form-label">Data Início</label>
-                    <input type="date" name="data_inicio" class="form-control" value="{{ $contrato->data_inicio }}">
+                    <input type="date" name="data_inicio" class="form-control" value="{{ substr($contrato->data_inicio,0,10) }}">
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Data Fim</label>
-                    <input type="date" name="data_fim" class="form-control" value="{{ $contrato->data_fim }}">
+                    <input type="date" name="data_fim" class="form-control" value="{{ substr($contrato->data_fim,0,10) }}">
                 </div>
 
                 <button type="submit" class="btn btn-primary">Atualizar</button>

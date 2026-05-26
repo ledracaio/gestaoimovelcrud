@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use Illuminate\Http\Request;
+use Illuminate\Database\QueryException;
 
 class ClienteController extends Controller
 {
@@ -75,7 +76,16 @@ class ClienteController extends Controller
 
     public function destroy(Cliente $cliente)
     {
-        $cliente->delete();
-        return redirect()->route('clientes.index');
+        try {
+            $cliente->delete();
+
+            return redirect()->route('clientes.index')
+                ->with('success', 'Cliente excluído com sucesso!');
+
+        } catch (QueryException $e) {
+
+            return redirect()->back()
+                ->with('error', 'Não é possível excluir este cliente pois ele possui contratos vinculados.');
+        }
     }
 }
