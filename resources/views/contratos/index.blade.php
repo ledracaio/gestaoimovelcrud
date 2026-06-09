@@ -1,22 +1,80 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>{{ $title }}</h1>
+    <div class="page-header mb-4">
+        <div>
+            <h1 class="page-title">
+                {{ $title }}
+            </h1>
+
+            <div class="page-subtitle">
+                {{ $subtitle }}
+            </div>
+        </div>
+    </div>
 
     <a href="{{ route('contratos.create') }}" class="btn btn-primary mb-3">
+        <i class="bi bi-file-earmark-plus-fill"></i>
         Novo Contrato
     </a>
 
-    <table class="table table-striped table-bordered">
-        <thead class="table-dark">
-        <tr>
-            <th>ID</th>
-            <th>Cliente</th>
-            <th>Imóvel</th>
-            <th>Período</th>
-            <th>Ações</th>
-        </tr>
-        </thead>
+    <div class="card-modern">
+        <table class="table table-modern table-hover align-middle mb-0">
+            <thead>
+            <tr>
+
+                <th>
+                    <a href="{{ route('contratos.index', [
+        'sort' => 'id',
+        'direction' => request('sort') == 'id' && request('direction', 'asc') == 'asc'
+            ? 'desc'
+            : 'asc',
+        'per_page' => request('per_page')
+    ]) }}"
+                       class="text-decoration-none text-dark fw-semibold">
+
+                        ID
+
+                        @if(request('sort', 'id') == 'id')
+                            <i class="bi bi-caret-{{ request('direction', 'asc') == 'asc' ? 'up' : 'down' }}-fill"></i>
+                        @endif
+
+                    </a>
+                </th>
+
+                <th>Cliente</th>
+                <th>Imóvel</th>
+
+                <th>
+                    <a href="{{ route('contratos.index', [
+            'sort' => 'data_inicio',
+            'direction' => request('sort') == 'data_inicio' && request('direction','asc') == 'asc' ? 'desc' : 'asc',
+            'per_page' => request('per_page')
+        ]) }}" class="text-decoration-none text-dark fw-semibold">
+                        Início
+                        @if(request('sort') == 'data_inicio')
+                            <i class="bi bi-caret-{{ request('direction') == 'asc' ? 'up' : 'down' }}-fill"></i>
+                        @endif
+                    </a>
+                </th>
+
+                <th>
+                    <a href="{{ route('contratos.index', [
+            'sort' => 'data_fim',
+            'direction' => request('sort') == 'data_fim' && request('direction','asc') == 'asc' ? 'desc' : 'asc',
+            'per_page' => request('per_page')
+        ]) }}" class="text-decoration-none text-dark fw-semibold">
+                        Fim
+                        @if(request('sort') == 'data_fim')
+                            <i class="bi bi-caret-{{ request('direction') == 'asc' ? 'up' : 'down' }}-fill"></i>
+                        @endif
+                    </a>
+                </th>
+
+                <th>Ações</th>
+
+            </tr>
+            </thead>
         <tbody>
         @foreach($contratos as $contrato)
             <tr>
@@ -24,19 +82,76 @@
                 <td>{{ $contrato->cliente->nome ?? '—' }}</td>
                 <td>{{ $contrato->imovel->titulo ?? '—' }}</td>
                 <td>
-                    {{ $contrato->data_inicio->format('d/m/Y') }} até {{ $contrato->data_fim->format('d/m/Y') }}
+                    {{ $contrato->data_inicio->format('d/m/Y') }}
                 </td>
                 <td>
-                    <a href="{{ route('contratos.show', $contrato->id) }}"
-                       class="btn btn-info btn-sm">Ver</a>
-                    <a href="{{ route('contratos.edit', $contrato->id) }}" class="btn btn-warning btn-sm">
-                        Editar
-                    </a>
-                    <a href="{{ route('contratos.delete', $contrato->id) }}"
-                       class="btn btn-danger btn-sm">Excluir</a>
+                    {{ $contrato->data_fim->format('d/m/Y') }}
+                </td>
+                <td>
+                    <div class="d-flex gap-2">
+
+                        <a href="{{ route('contratos.show', $contrato) }}"
+                           class="btn btn-outline-primary btn-sm"
+                           title="Visualizar">
+                            <i class="bi bi-eye-fill"></i> Ver
+                        </a>
+
+                        <a href="{{ route('contratos.edit', $contrato) }}"
+                           class="btn btn-outline-warning btn-sm"
+                           title="Editar">
+                            <i class="bi bi-pencil-fill"></i> Editar
+                        </a>
+
+                        <a href="{{ route('contratos.delete', $contrato) }}"
+                           class="btn btn-outline-danger btn-sm"
+                           title="Excluir">
+                            <i class="bi bi-trash-fill"></i> Deletar
+                        </a>
+
+                    </div>
                 </td>
             </tr>
         @endforeach
         </tbody>
     </table>
+    </div>
+    <div class="d-flex flex-column flex-lg-row justify-content-between align-items-center gap-3 mt-4">
+
+        <div class="d-flex align-items-center gap-3">
+
+            <small class="text-muted">
+                Mostrando {{ $contratos->firstItem() ?? 0 }}
+                a {{ $contratos->lastItem() ?? 0 }}
+                de {{ $contratos->total() }} contratos
+            </small>
+
+            <form method="GET" class="d-flex align-items-center gap-2">
+
+                <label class="small text-muted mb-0">
+                    Exibir
+                </label>
+
+                <select name="per_page"
+                        class="form-select form-select-sm form-select-modern"
+                        onchange="this.form.submit()">
+
+                    <option value="2" {{ request('per_page') == 2 ? 'selected' : '' }}>2</option>
+                    <option value="5" {{ request('per_page') == 5 ? 'selected' : '' }}>5</option>
+                    <option value="10" {{ request('per_page',10) == 10 ? 'selected' : '' }}>10</option>
+                    <option value="15" {{ request('per_page') == 15 ? 'selected' : '' }}>15</option>
+                    <option value="20" {{ request('per_page') == 20 ? 'selected' : '' }}>20</option>
+                    <option value="50" {{ request('per_page') == 50 ? 'selected' : '' }}>50</option>
+
+                </select>
+                <label class="small text-muted mb-0"> registros</label>
+
+            </form>
+
+        </div>
+
+        <div>
+            {{ $contratos->onEachSide(1)->links() }}
+        </div>
+
+    </div>
 @endsection

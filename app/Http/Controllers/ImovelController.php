@@ -11,10 +11,18 @@ class ImovelController extends Controller
 {
     public function index()
     {
-        $imoveis = Imovel::all();
+        $perPage = request('per_page', 10);
+
+        $sort = request('sort', 'id');
+        $direction = request('direction', 'asc');
+
+        $imoveis = Imovel::orderBy($sort, $direction)
+            ->paginate($perPage)
+            ->withQueryString();
         return view('imoveis.index', [
             'imoveis' => $imoveis,
-            'title' => 'Imóveis'
+            'title' => 'Imóveis',
+            'subtitle' => 'Visualize e administre os imóveis disponíveis.'
         ]);
     }
 

@@ -2,26 +2,50 @@
 
 @section('content')
 
-<h1>{{ $title }}</h1>
+    <div class="page-header">
+        <div>
+            <h1 class="page-title text-danger">Excluir Cliente</h1>
+            <div class="page-subtitle">
+                Esta ação não poderá ser desfeita
+            </div>
+        </div>
+    </div>
 
-<div class="card shadow-sm border-danger">
-    <div class="card-body">
+    <div class="content-card border border-danger">
 
-        <p>{{ $text }}</p>
+        <div class="text-center">
 
-        <p><strong>{{ $cliente->nome }}</strong></p>
+            <i class="bi bi-exclamation-triangle-fill text-danger"
+               style="font-size:4rem;"></i>
 
-        <form method="POST" action="{{ route('clientes.destroy', $cliente) }}">
-            @csrf
-            @method('DELETE')
+            <h4 class="mt-3">
+                Tem certeza que deseja excluir?
+            </h4>
 
-            <button class="btn btn-danger">Excluir</button>
+            <p class="text-secondary">
+                {{ $cliente->nome }}
+            </p>
 
-            <a href="{{ route('clientes.index') }}" class="btn btn-secondary">
-                Cancelar
-            </a>
-        </form>
+            <form method="POST"
+                  action="{{ route('clientes.destroy', $cliente) }}">
+                @csrf
+                @method('DELETE')
+
+                <button class="btn btn-danger">
+                    <i class="bi bi-trash-fill me-2"></i>
+                    Excluir
+                </button>
+
+                <a href="{{ route('clientes.index') }}"
+                   class="btn btn-outline-secondary">
+                    <i class="bi bi-x-circle me-2"></i>
+                    Cancelar
+                </a>
+
+            </form>
+
+        </div>
 
     </div>
-</div>
+
 @endsection

@@ -10,10 +10,19 @@ class ClienteController extends Controller
 {
     public function index()
     {
-        $clientes = Cliente::all();
+        $perPage = request('per_page', 10);
+
+        $sort = request('sort', 'id');
+        $direction = request('direction', 'asc');
+
+        $clientes = Cliente::orderBy($sort, $direction)
+            ->paginate($perPage)
+            ->withQueryString();
+
         return view('clientes.index', [
             'clientes' => $clientes,
-            'title' => 'Clientes'
+            'title' => 'Clientes',
+            'subtitle' => 'Gerencie os clientes cadastrados no sistema.'
         ]);
     }
 

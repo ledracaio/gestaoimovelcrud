@@ -1,23 +1,54 @@
 @extends('layouts.app')
 
 @section('content')
-    <h1>{{ $title }}</h1>
 
-    <div class="card shadow-sm border-danger">
-        <div class="card-body">
-            <p>{{ $text }}</p>
+    <div class="page-header">
+        <div>
+            <h1 class="page-title text-danger">
+                Excluir Tipo de Imóvel
+            </h1>
 
-            <p><strong>{{ $tipo->nome }}</strong></p>
+            <div class="page-subtitle">
+                Esta ação não poderá ser desfeita
+            </div>
+        </div>
+    </div>
 
-            <form method="POST" action="{{ route('tipos.destroy', $tipo) }}">
+    <div class="content-card border border-danger">
+
+        <div class="text-center">
+
+            <i class="bi bi-exclamation-triangle-fill text-danger"
+               style="font-size:4rem;"></i>
+
+            <h4 class="mt-3">
+                Tem certeza que deseja excluir este tipo?
+            </h4>
+
+            <p class="text-secondary">
+                {{ $tipo->nome }}
+            </p>
+
+            <form method="POST"
+                  action="{{ route('tipos.destroy', $tipo) }}">
                 @csrf
                 @method('DELETE')
 
-                <button class="btn btn-danger">Excluir</button>
-                <a href="{{ route('tipos.index') }}" class="btn btn-secondary">
+                <button class="btn btn-danger">
+                    <i class="bi bi-trash-fill me-2"></i>
+                    Excluir
+                </button>
+
+                <a href="{{ route('tipos.index') }}"
+                   class="btn btn-outline-secondary">
+                    <i class="bi bi-x-circle me-2"></i>
                     Cancelar
                 </a>
+
             </form>
+
         </div>
+
     </div>
+
 @endsection

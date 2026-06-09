@@ -12,10 +12,22 @@ class ContratoController extends Controller
 {
     public function index()
     {
-        $contratos = Contrato::all();
+        $perPage = request('per_page', 10);
+
+        $sort = request('sort', 'id');
+        $direction = request('direction', 'asc');
+
+        $contratos = Contrato::with([
+            'cliente',
+            'imovel'
+        ])
+            ->orderBy($sort, $direction)
+            ->paginate($perPage)
+            ->withQueryString();
         return view('contratos.index', [
             'contratos' => $contratos,
-            'title' => 'Contratos'
+            'title' => 'Contratos',
+            'subtitle' => 'Acompanhe os contratos vinculados a clientes e imóveis.'
         ]);
     }
 

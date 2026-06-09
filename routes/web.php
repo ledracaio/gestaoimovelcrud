@@ -5,10 +5,31 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ContratoController;
 use App\Http\Controllers\TipoImovelController;
 use Illuminate\Support\Facades\Route;
+use App\Models\Cliente;
+use App\Models\Imovel;
+use App\Models\Contrato;
+use App\Models\TipoImovel;
 
 Route::get('/', function () {
-    return redirect()->route('imoveis.index');
-});
+
+    return view('welcome', [
+        'title' => 'Dashboard',
+
+        'clientes' => Cliente::count(),
+        'imoveis' => Imovel::count(),
+        'contratos' => Contrato::count(),
+        'tipos' => TipoImovel::count(),
+
+        'ultimosContratos' => Contrato::with([
+            'cliente',
+            'imovel'
+        ])
+            ->latest()
+            ->take(5)
+            ->get(),
+    ]);
+
+})->name('home');
 
 
 // CLIENTES

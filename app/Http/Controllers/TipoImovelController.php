@@ -9,10 +9,18 @@ class TipoImovelController extends Controller
 {
     public function index()
     {
-        $tipos = TipoImovel::all();
+        $perPage = request('per_page', 10);
+
+        $sort = request('sort', 'nome');
+        $direction = request('direction', 'asc');
+
+        $tipos = TipoImovel::orderBy($sort, $direction)
+            ->paginate($perPage)
+            ->withQueryString();
         return view('tipos.index', [
             'tipos' => $tipos,
-            'title' => 'Tipos de Imóvel'
+            'title' => 'Tipos de Imóvel',
+            'subtitle' => 'Organize as categorias dos imóveis cadastrados.'
         ]);
     }
 
