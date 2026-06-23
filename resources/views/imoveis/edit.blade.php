@@ -94,14 +94,19 @@
                     Tipo de Imóvel
                 </label>
 
-                <select name="tipo_imovel_id" class="form-select">
-                    @foreach($tipos as $tipo)
-                        <option value="{{ $tipo->id }}"
-                            {{ $imovel->tipo_imovel_id == $tipo->id ? 'selected' : '' }}>
-                            {{ $tipo->nome }}
-                        </option>
-                    @endforeach
-                </select>
+                <div class="input-group">
+                    <select name="tipo_imovel_id" id="tipo_imovel_id" class="form-select">
+                        @foreach($tipos as $tipo)
+                            <option value="{{ $tipo->id }}"
+                                {{ $imovel->tipo_imovel_id == $tipo->id ? 'selected' : '' }}>
+                                {{ $tipo->nome }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalNovoTipo">
+                        <i class="bi bi-plus-lg"></i>
+                    </button>
+                </div>
             </div>
 
             <button type="submit" class="btn btn-primary">
@@ -119,4 +124,57 @@
 
     </div>
 
+    <!-- Modal Novo Tipo -->
+    <div class="modal fade" id="modalNovoTipo" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold">Novo Tipo de Imóvel</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Nome do Tipo</label>
+                        <input type="text" id="novo_tipo_nome" class="form-control" placeholder="Ex: Galpão, Cobertura">
+                    </div>
+                </div>
+                <div class="modal-footer border-0 pt-0">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" id="btnSalvarTipo" class="btn btn-primary">Salvar e Selecionar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('btnSalvarTipo').addEventListener('click', function() {
+            const nome = document.getElementById('novo_tipo_nome').value;
+            if (!nome) return alert('Por favor, digite o nome do tipo.');
+
+            fetch('{{ route('tipos.api.store') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ nome: nome })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const select = document.getElementById('tipo_imovel_id');
+                    const option = new Option(data.nome, data.id, true, true);
+                    select.add(option);
+
+                    // Fechar modal
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('modalNovoTipo'));
+                    modal.hide();
+                    document.getElementById('novo_tipo_nome').value = '';
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    alert('Ocorreu um erro ao salvar o tipo.');
+                });
+        });
+    </script>
 @endsection

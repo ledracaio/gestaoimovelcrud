@@ -45,15 +45,23 @@ class ContratoController extends Controller
 
     public function store(Request $request)
     {
-        $contrato = $request->validate([
+        $dados = $request->validate([
             'cliente_id' => 'required',
             'imovel_id' => 'required',
             'data_inicio' => 'required',
             'data_fim' => 'nullable'
         ]);
 
-        Contrato::create($contrato);
-        return redirect()->back();
+        Contrato::create($dados);
+
+        if ($request->has('add_another')) {
+            return redirect()->route('contratos.create')
+                ->with('success', 'Contrato cadastrado com sucesso!')
+                ->with('add_another', true);
+        }
+
+        return redirect()->route('contratos.index')
+            ->with('success', 'Contrato cadastrado com sucesso!');
     }
 
     public function show(Contrato $contrato)
@@ -102,7 +110,13 @@ class ContratoController extends Controller
 
     public function destroy(Contrato $contrato)
     {
-        $contrato->delete();
-        return redirect()->route('contratos.index');
+        try {
+            $contrato->delete();
+            return redirect()->route('contratos.index')
+                ->with('success', 'Contrato excluído com sucesso!');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()
+                ->with('error', 'Não é possível excluir este contrato pois existem dependências vinculadas.');
+        }
     }
 }

@@ -37,6 +37,15 @@
                 <input type="email" name="email" class="form-control" required>
             </div>
 
+            <div class="mb-4">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="add_another" id="add_another" {{ session('add_another') ? 'checked' : '' }}>
+                    <label class="form-check-label" for="add_another">
+                        Adicionar outro após salvar
+                    </label>
+                </div>
+            </div>
+
             <button class="btn btn-success">
                 <i class="bi bi-check-circle-fill me-2"></i>
                 Salvar

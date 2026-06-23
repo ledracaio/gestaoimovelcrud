@@ -33,12 +33,31 @@ class TipoImovelController extends Controller
 
     public function store(Request $request)
     {
-        $tipo = $request->validate([
+        $dados = $request->validate([
             'nome' => 'required'
         ]);
 
-        TipoImovel::create($tipo);
-        return redirect()->back();
+        TipoImovel::create($dados);
+
+        if ($request->has('add_another')) {
+            return redirect()->route('tipos.create')
+                ->with('success', 'Tipo de imóvel cadastrado com sucesso!')
+                ->with('add_another', true);
+        }
+
+        return redirect()->route('tipos.index')
+            ->with('success', 'Tipo de imóvel cadastrado com sucesso!');
+    }
+
+    public function apiStore(Request $request)
+    {
+        $dados = $request->validate([
+            'nome' => 'required'
+        ]);
+
+        $tipo = TipoImovel::create($dados);
+
+        return response()->json($tipo);
     }
 
     public function show(TipoImovel $tipo)
@@ -79,7 +98,13 @@ class TipoImovelController extends Controller
 
     public function destroy(TipoImovel $tipo)
     {
-        $tipo->delete();
-        return redirect()->route('tipos.index');
+        try {
+            $tipo->delete();
+            return redirect()->route('tipos.index')
+                ->with('success', 'Tipo de imóvel excluído com sucesso!');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->back()
+                ->with('error', 'Não é possível excluir este tipo de imóvel pois existem imóveis vinculados a ele.');
+        }
     }
 }

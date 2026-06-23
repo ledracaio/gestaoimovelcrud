@@ -35,14 +35,24 @@ class ClienteController extends Controller
 
     public function store(Request $request)
     {
-        $cliente = $request->validate([
+        $dados = $request->validate([
             'nome' => 'required|min:4',
-            'telefone' => 'nullable',
-            'email' => 'nullable|email'
+            'telefone' => 'required',
+            'email' => 'required|email'
         ]);
 
-        Cliente::create($cliente);
-        return redirect()->route('clientes.index');
+        Cliente::create($dados);
+
+        $addAnother = $request->has('add_another');
+
+        if ($addAnother) {
+            return redirect()->route('clientes.create')
+                ->with('success', 'Cliente cadastrado com sucesso!')
+                ->with('add_another', true);
+        }
+
+        return redirect()->route('clientes.index')
+            ->with('success', 'Cliente cadastrado com sucesso!');
     }
 
     public function show(Cliente $cliente)

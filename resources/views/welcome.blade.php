@@ -178,7 +178,7 @@
                         </td>
 
                         <td>
-                            {{ $contrato->data_inicio->format('d/m/Y H:m:s') }}
+                            {{ $contrato->data_inicio->format('d/m/Y') }}
                         </td>
 
                     </tr>

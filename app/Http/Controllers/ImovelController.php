@@ -38,7 +38,7 @@ class ImovelController extends Controller
 
     public function store(Request $request)
     {
-        $imovel = $request->validate([
+        $dados = $request->validate([
             'titulo' => 'required',
             'endereco' => 'required',
             'cidade' => 'required',
@@ -47,8 +47,18 @@ class ImovelController extends Controller
             'tipo_imovel_id' => 'required'
         ]);
 
-        Imovel::create($imovel);
-        return redirect()->back();
+        Imovel::create($dados);
+
+        $addAnother = $request->has('add_another');
+
+        if ($addAnother) {
+            return redirect()->route('imoveis.create')
+                ->with('success', 'Imóvel cadastrado com sucesso!')
+                ->with('add_another', true);
+        }
+
+        return redirect()->route('imoveis.index')
+            ->with('success', 'Imóvel cadastrado com sucesso!');
     }
 
     public function show(Imovel $imovel)

@@ -74,3 +74,4 @@ Route::put('tipos/{tipo}', [TipoImovelController::class, 'update'])->name('tipos
 Route::get('tipos/excluir/{tipo}', [TipoImovelController::class,'delete'])->name('tipos.delete');
 Route::delete('tipos/{tipo}', [TipoImovelController::class,'destroy'])->name('tipos.destroy');
 Route::get('tipos/{tipo}', [TipoImovelController::class,'show'])->name('tipos.show');
+Route::post('api/tipos', [TipoImovelController::class, 'apiStore'])->name('tipos.api.store');
